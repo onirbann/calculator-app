@@ -89,6 +89,6 @@ app.post('/calculate-from-results', async (req, res) => {
 
   
 
-app.listen(port, () => {
-    console.log(`Calculator API running on http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Calculator API running on port ${port}`);
 });
