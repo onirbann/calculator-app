@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculator App</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
+    input, button { margin: 0.5rem 0; padding: 0.5rem; width: 100%; }
+    .box { margin-bottom: 2rem; border: 1px solid #ccc; padding: 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>🧮 Calculator App</h2>
+
+  <div class="box">
+    <h3>Calculate and Save</h3>
+    <input id="calc-input" placeholder="e.g. 7 * 6" />
+    <button onclick="calculate()">Calculate</button>
+    <p id="calc-output"></p>
+  </div>
+
+  <div class="box">
+    <h3>Get Past Result</h3>
+    <input id="fetch-id" placeholder="Result ID (e.g. 2)" />
+    <button onclick="getResult()">Get Result</button>
+    <p id="fetch-output"></p>
+  </div>
+
+  <div class="box">
+    <h3>Add Two Results</h3>
+    <input id="id1" placeholder="Result 1 ID" />
+    <input id="id2" placeholder="Result 2 ID" />
+    <button onclick="addResults()">Add</button>
+    <p id="add-output"></p>
+  </div>
+
+  <script>
+    const API = "http://localhost:3000";
+
+    async function calculate() {
+      const expression = document.getElementById("calc-input").value;
+      const res = await fetch(`${API}/calculate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expression })
+      });
+      const data = await res.json();
+      document.getElementById("calc-output").innerText = JSON.stringify(data);
+    }
+
+    async function getResult() {
+      const id = document.getElementById("fetch-id").value;
+      const res = await fetch(`${API}/result/${id}`);
+      const data = await res.json();
+      document.getElementById("fetch-output").innerText = JSON.stringify(data);
+    }
+
+    async function addResults() {
+      const id1 = parseInt(document.getElementById("id1").value);
+      const id2 = parseInt(document.getElementById("id2").value);
+      const res = await fetch(`${API}/calculate-from-results`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id1, id2 })
+      });
+      const data = await res.json();
+      document.getElementById("add-output").innerText = JSON.stringify(data);
+    }
+  </script>
+</body>
+</html>
