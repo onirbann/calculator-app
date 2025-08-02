@@ -3,13 +3,15 @@ const { Pool } = require('pg');
 
 // Replace this with your actual connection string
 const pool = new Pool({
-  connectionString: 'postgresql://neondb_owner:npg_XtJUmx79VvrT@ep-sparkling-hall-a1l38qla-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // Required by Neon
 });
 
 
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
 
 app.use(express.json());
 
